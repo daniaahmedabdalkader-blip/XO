@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+
+char board[3][3] = {
+	{' ', ' ', ' '},
+	{' ', ' ', ' '},
+	{' ', ' ', ' '}
+};
+
+void dis() {
+	cout << "\n  1   2   3\n";
+	for (int i = 0; i < 3; i++) {
+		cout << i + 1 << " ";
+		for (int j = 0; j < 3; j++) {
+			cout << board[i][j];
+			if (j < 2) cout << " | ";
+		}
+		cout << endl;
+		if (i < 2) cout << " ---+---+---" << endl;
+	}
+	cout << endl;
+}
+void resetBoard() {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			board[i][j] = ' ';
+		}
+	}
+}
+bool full() {
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			if (board[i][j] == ' ') return false;
+		}
+	}
+	return true;
+}
+
+bool win() {
+	for (int i = 0; i < 3; ++i) {
+		if (board[i][0] != ' ' && board[i][0] == board[i][1] && board[i][1] == board[i][2])
+			return true;
+		if (board[0][i] != ' ' && board[0][i] == board[1][i] && board[1][i] == board[2][i])
+			return true;
+	}
+	if (board[1][1] != ' ') {
+		if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) return true;
+		if (board[2][0] == board[1][1] && board[1][1] == board[0][2]) return true;
+	}
+	return false;
+}
+void game() {
+  resetBoard();
+	int row, col;
+	char player = 'X';
+
+	while (true) {
+		dis();
+		cout << "Player " << player << ", enter row (1-3) and column (1-3): ";
+		cin >> row >> col;
+
+		row--;
+		col--;
+
+		if (row < 0 || row > 2 || col < 0 || col > 2 || board[row][col] != ' ') {
+			cout << "Invalid move, try again!\n";
+			continue;
+		}
+
+		board[row][col] = player;
+
+		if (win()) {
+			dis();
+			cout << "Player " << player << " wins!\n";
+			break;
+		}
+
+		if (full()) {
+			dis();
+			cout << "It's a draw!\n";
+			break;
+		}
+
+		if (player == 'X') {
+			player = 'O';
+		} else {
+			player = 'X';
+		}
+	}
+}
+
+int main() {
+
+	int again;
+	do {
+		game();
+		cout<<"\nwanna play again? write 1!\n";
+		cin>>again;
+		cout<<"\n_______\n";
+
+	} while(again==1);
+	cout<<"thanks for playing";
+
+	return 0;
+}
